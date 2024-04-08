@@ -54,6 +54,7 @@ Route::post('/admin/sub_category/add',[SubCategoryController::class,'sub_categor
 Route::get('/admin/sub_category/edit/{id}',[SubCategoryController::class,'sub_category_edit'])->name('sub_category.edit');
 Route::post('/admin/sub_category/edit/{id}',[SubCategoryController::class,'sub_category_update'])->name('sub_category.update');
 Route::get('/admin/sub_category/delete/{id}',[SubCategoryController::class,'sub_category_delete'])->name('sub_category.delete');
+Route::post('admin/get_sub_category',[SubCategoryController::class,'get_sub_category'])->name('get_sub_category');
 
 // products route
 Route::get('/admin/product/list',[ProductController::class,'product_lists'])->name('product.lists');

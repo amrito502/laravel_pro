@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Brand;
 use App\Models\Product;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-// use Illuminate\Support\Facades\Str;
 use App\Models\CategoryModel;
 use App\Http\Controllers\Controller;
+use App\Models\ColorModel;
 use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
     public function product_lists()
     {
-        $data['getRecord'] = Product::all();
+        $data['getRecord'] = Product::getRecord();
         $data['header_title'] = "Product Lists";
         return view('admin.product.list', $data);
     }
@@ -53,6 +54,9 @@ class ProductController extends Controller
     {
         $product = Product::getSingle($product_id);
         if(!empty($product)){
+            $data['getCategory'] = CategoryModel::getRecordActive();
+            $data['getBrand'] = Brand::getRecordActive();
+            $data['getColor'] = ColorModel::getRecordActive();
             $data['product'] = $product;
             $data['header_title'] = "Edit Product";
             return view('admin.product.edit', $data);

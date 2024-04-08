@@ -19,6 +19,16 @@ class SubCategory extends Model
                      ->paginate(50);
     }
 
+    static public function getRecordSubCategory($category_id){
+        return self::select('sub_category.*')
+                     ->join('users','users.id', '=', 'sub_category.created_by')
+                     ->where('sub_category.is_delete', '=', 0)
+                     ->where('sub_category.status', '=', 0)
+                     ->where('sub_category.category_id', '=', $category_id)
+                     ->orderBy('sub_category.name','asc')
+                     ->get();
+    }
+
     static function getSingle($id){
         return self::find($id);
     }

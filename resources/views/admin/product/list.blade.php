@@ -21,8 +21,7 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Name</th>
-                                            <th>Slug</th>
+                                            <th>Title</th>
                                             <th>Created By</th>
                                             <th>Status</th>
                                             <th>Created Date</th>
@@ -33,8 +32,7 @@
                                       @foreach ($getRecord as $value)
                                         <tr>
                                             <td>{{ $value->id }}</td>
-                                            <td>{{ $value->name }}</td>
-                                            <td>{{ $value->slug }}</td>
+                                            <td>{{ $value->title }}</td>
                                             <td>{{ $value->created_by_name }}</td>
                                             <td>{{ ($value->status == 0) ? 'Active':'Inactive' }}</td>
                                             <td>{{ date('d-m-Y', strtotime($value->created_at)) }}</td>
@@ -46,6 +44,9 @@
                                       @endforeach
                                     </tbody>
                                 </table>
+                                <div style="padding: 10px; float: right;">
+                                    {!! $getRecord->appends(Illuminate\Support\Facades\Request::except('page'))->links() !!}
+                                </div>
                             </div>
                             <!-- /.card-body -->
                         </div>
