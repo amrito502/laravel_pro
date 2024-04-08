@@ -43,7 +43,7 @@
 
               <li class="nav-item mb-2">
                 <a href="{{ url('admin/sub_category/list') }}" class="nav-link @if(Request::segment(2) == 'sub_category') active @endif">
-                  <i class="nav-icon far fa-list-alt"></i>
+                    <i class="nav-icon far fa-list-alt"></i>
                   <p>
                    Sub Category
                   </p>
@@ -52,7 +52,7 @@
 
               <li class="nav-item mb-2">
                 <a href="{{ url('admin/product/list') }}" class="nav-link @if(Request::segment(2) == 'product') active @endif">
-                    <i class="nav-icon fa-brands fa-product-hunt"></i>
+                    <i class="nav-icon far fa-list-alt"></i>
                   <p>
                    Products
                   </p>
@@ -61,7 +61,7 @@
 
               <li class="nav-item mb-2">
                 <a href="{{ url('admin/brand/list') }}" class="nav-link @if(Request::segment(2) == 'brand') active @endif">
-                    <i class="nav-icon  fa-brands fa-bandcamp"></i>
+                    <i class="nav-icon far fa-list-alt"></i>
                   <p>
                    Brand
                   </p>
@@ -70,36 +70,13 @@
 
               <li class="nav-item mb-2">
                 <a href="{{ url('admin/color/list') }}" class="nav-link @if(Request::segment(2) == 'color') active @endif">
-                    <i class="nav-icon  fa-solid fa-droplet"></i>
+                    <i class="nav-icon far fa-list-alt"></i>
                   <p>
                    Color
                   </p>
                 </a>
               </li>
 
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-chart-pie"></i>
-              <p>
-                Charts
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="pages/charts/chartjs.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>ChartJS</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/charts/flot.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Flot</p>
-                </a>
-              </li>
-            </ul>
-          </li>
 
           <hr>
 

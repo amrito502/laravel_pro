@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use App\Models\ProductColorModel;
 class Product extends Model
 {
     use HasFactory;
@@ -25,6 +25,11 @@ class Product extends Model
                ->where('product.is_delete', '=', 0)
                ->orderBy('product.id','desc')
                ->paginate(50);
+    }
+
+
+    public function getColor(){
+        return $this->hasMany(ProductColorModel::class,"product_id");
     }
 
 
