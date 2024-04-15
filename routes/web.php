@@ -65,6 +65,9 @@ Route::post('/admin/product/edit/{id}',[ProductController::class,'product_update
 Route::get('/admin/product/delete/{id}',[ProductController::class,'product_delete'])->name('product.delete');
 Route::get('/admin/product/image_delete/{id}',[ProductController::class,'product_image_delete'])->name('product.image.delete');
 
+Route::post('/admin/product_image_shortable',[ProductController::class,'product_image_shortable'])->name('admin.product_image_shortable');
+
+
 
 // Brand route
 Route::get('/admin/brand/list',[BrandController::class,'list'])->name('brand.lists');

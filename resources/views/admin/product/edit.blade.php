@@ -109,8 +109,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label for="">Color <span class="text-danger">*</span></label>
-                                                @foreach($getColor as $color)
-
+                                                @foreach ($getColor as $color)
                                                     <div>
                                                         <label><input type="checkbox" name="color_id[]"
                                                                 value="{{ $color->id }}"> {{ $color->name }}</label>
@@ -136,31 +135,34 @@
                                                                 $i_s = 1;
                                                             @endphp
                                                             @foreach ($product->getSize as $size)
-                                                            <tr id="DeleteSize{{ $i_s }}">
-                                                                <td>
-                                                                    <input type="text" value="{{ $size->name }}" name="size[{{ $i_s }}][name]" placeholder="Name"
-                                                                        class="form-control">
-                                                                </td>
-                                                                <td>
-                                                                    <input type="text" value="{{ $size->price }}" name="size[{{ $i_s }}][price]" placeholder="Price"
-                                                                        class="form-control">
-                                                                </td>
-                                                                <td>
-                                                                    <button type="button" id="{{ $i_s }}" class="btn btn-danger btn-sm DeleteSize">Delete</button>
-                                                                </td>
-                                                            </tr>
-                                                            @php
-                                                            $i_s++;
-                                                        @endphp
+                                                                <tr id="DeleteSize{{ $i_s }}">
+                                                                    <td>
+                                                                        <input type="text" value="{{ $size->name }}"
+                                                                            name="size[{{ $i_s }}][name]"
+                                                                            placeholder="Name" class="form-control">
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="text" value="{{ $size->price }}"
+                                                                            name="size[{{ $i_s }}][price]"
+                                                                            placeholder="Price" class="form-control">
+                                                                    </td>
+                                                                    <td>
+                                                                        <button type="button" id="{{ $i_s }}"
+                                                                            class="btn btn-danger btn-sm DeleteSize">Delete</button>
+                                                                    </td>
+                                                                </tr>
+                                                                @php
+                                                                    $i_s++;
+                                                                @endphp
                                                             @endforeach
                                                             <tr>
                                                                 <td>
-                                                                    <input type="text" name="size[100][name]" placeholder="Name"
-                                                                        class="form-control">
+                                                                    <input type="text" name="size[100][name]"
+                                                                        placeholder="Name" class="form-control">
                                                                 </td>
                                                                 <td>
-                                                                    <input type="text" name="size[100][price]" placeholder="Price"
-                                                                        class="form-control">
+                                                                    <input type="text" name="size[100][price]"
+                                                                        placeholder="Price" class="form-control">
                                                                 </td>
                                                                 <td>
                                                                     <button type="button"
@@ -182,23 +184,28 @@
                                             <div class="form-group">
                                                 <label for="image">Choose Product Image <span
                                                         class="text-danger">*</span></label>
-                                               <input type="file" name="image[]" multiple accept="image/*" class="form-control">
+                                                <input type="file" name="image[]" multiple accept="image/*"
+                                                    class="form-control">
                                             </div>
                                         </div>
 
                                         @if (!empty($product->getImage->count()))
-                                        <div class="col-md-12">
-                                            <div class="row">
-                                                @foreach ($product->getImage as $image)
-                                                    @if (!empty($image->getLogo()))
-                                                        <div class="col-md-1 col-sm-4 col-xl-2 mt-3 mb-4 card pb-2">
-                                                            <img src="{{ $image->getLogo() }}" style="width: 100%; height:64px;" alt="product image">
-                                                            <a onclick="return confirm('Are You Sure to Delete This Image?')" href="{{ url('admin/product/image_delete/'.$image->id) }}" class="text-danger mt-2">Delete</a>
-                                                        </div>
-                                                    @endif
-                                                @endforeach
+                                            <div class="col-md-12">
+                                                <div class="row" id="sortable">
+                                                    @foreach ($product->getImage as $image)
+                                                        @if (!empty($image->getLogo()))
+                                                            <div id="{{ $image->id }}"
+                                                                class="sortable_image col-md-2 col-sm-4 col-xl-2 mt-3 mb-4 card pb-2">
+                                                                <img src="{{ $image->getLogo() }}"
+                                                                    style="width: 100%; height:94px;" alt="product image">
+                                                                <a onclick="return confirm('Are You Sure to Delete This Image?')"
+                                                                    href="{{ url('admin/product/image_delete/' . $image->id) }}"
+                                                                    class="text-danger mt-2">Delete</a>
+                                                            </div>
+                                                        @endif
+                                                    @endforeach
+                                                </div>
                                             </div>
-                                        </div>
                                         @endif
 
                                         <div class="col-md-12">
@@ -259,8 +266,43 @@
 {{-- ========scripts====== --}}
 @section('scripts')
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    {{-- <script src="https://code.jquery.com/jquery-3.6.0.js"></script> --}}
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+
+
+    <script>
+        $(document).ready(function() {
+            $("#sortable").sortable({
+                update: function(event, ui) {
+                    var photo_id = new Array();
+                    $('.sortable_image').each(function() {
+                        var id = $(this).attr('id');
+                        photo_id.push(id);
+                    });
+
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ url('admin/product_image_shortable') }}",
+                        data: {
+                            "photo_id": photo_id,
+                            "_token": "{{ csrf_token() }}",
+
+                        },
+                        dataType: "json",
+                        success: function(data) {
+
+                        },
+                        error: function(data) {
+
+                        },
+                    });
+
+                }
+            });
+        });
+    </script>
 
     <script>
         $(document).ready(function() {
@@ -275,16 +317,16 @@
         // add size
         $('body').delegate('.AddSize', 'click', function(e) {
             var html = '<tr id="DeleteSize' + i + '">\n\
-                                    <td>\n\
-                                        <input type="text" name="size[' + i + '][name]" placeholder="Name" class="form-control">\n\
-                                    </td>\n\
-                                    <td>\n\
-                                        <input type="text" name="size[' + i + '][price]" placeholder="Price" class="form-control">\n\
-                                    </td>\n\
-                                    <td>\n\
-                                        <button type="button" id="' + i + '" class="btn btn-danger btn-sm DeleteSize">Delete</button>\n\
-                                    </td>\n\
-                                </tr>';
+                                        <td>\n\
+                                            <input type="text" name="size[' + i + '][name]" placeholder="Name" class="form-control">\n\
+                                        </td>\n\
+                                        <td>\n\
+                                            <input type="text" name="size[' + i + '][price]" placeholder="Price" class="form-control">\n\
+                                        </td>\n\
+                                        <td>\n\
+                                            <button type="button" id="' + i + '" class="btn btn-danger btn-sm DeleteSize">Delete</button>\n\
+                                        </td>\n\
+                                    </tr>';
             i++;
             $('#AppendSize').append(html);
         });
