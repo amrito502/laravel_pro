@@ -10,6 +10,8 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\CategoryModel;
 use App\Models\ProductColorModel;
+use App\Models\ProductSizeModel;
+use App\Models\ProductImageModel;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
@@ -95,13 +97,60 @@ class ProductController extends Controller
                     $color->save();
                 }
             }
+
+            ProductSizeModel::DeleteRecord($product->id);
+            if(!empty($request->size)){
+                foreach($request->size as $size)
+                {
+                    if(!empty($size['name']))
+                    {
+                        $saveSize = new ProductSizeModel;
+                        $saveSize->name = $size['name'];
+                        $saveSize->price = !empty($size['price']) ? $size['price'] : 0;
+                        $saveSize->product_id = $product->id;
+                        $saveSize->save();
+                    }
+
+                }
+            }
+
+            if(!empty($request->file('image')))
+            {
+                foreach($request->file('image') as $value)
+                {
+                    if($value->isValid()){
+                        $ext = $value->getClientOriginalExtension();
+                        $rendomStr = $product->id.Str::random(20);
+                        $fileName = strtolower($rendomStr) .'.'.$ext;
+                        $value->move('upload/product/',$fileName);
+
+                        $imageUpload = new ProductImageModel;
+                        $imageUpload->image_name = $fileName;
+                        $imageUpload->image_extension = $ext;
+                        $imageUpload->product_id = $product->id;
+                        $imageUpload->save();
+                    }
+                }
+            }
+
+            return redirect()->back()->with('success', 'Product Successfully Updated!');
         }
         else
         {
             abort(404);
         }
 
-        return redirect()->back()->with('success', 'Product Successfully Updated!');
+
+    }
+
+    public function product_image_delete($id){
+        $image =  ProductImageModel::getSingle($id);
+        if (!empty($image->getLogo())) {
+            unlink('upload/product/'.$image->image_name);
+        }
+        $image->delete();
+        return redirect()->back()->with('success', 'Product Image Successfully Deleted!');
+
     }
 
     // public function product_delete($id)

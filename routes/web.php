@@ -63,6 +63,7 @@ Route::post('/admin/product/add',[ProductController::class,'product_insert'])->n
 Route::get('/admin/product/edit/{id}',[ProductController::class,'product_edit'])->name('product.edit');
 Route::post('/admin/product/edit/{id}',[ProductController::class,'product_update'])->name('product.update');
 Route::get('/admin/product/delete/{id}',[ProductController::class,'product_delete'])->name('product.delete');
+Route::get('/admin/product/image_delete/{id}',[ProductController::class,'product_image_delete'])->name('product.image.delete');
 
 
 // Brand route

@@ -19,7 +19,7 @@
                             <!-- /.card-header -->
                             <div class="card-body p-3">
                                 @include('admin.layouts._messages')
-                                <form action="" method="post">
+                                <form action="" method="post" enctype="multipart/form-data">
                                     @csrf
 
                                     <div class="row">
@@ -132,13 +132,34 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody id="AppendSize">
-                                                            <tr>
+                                                            @php
+                                                                $i_s = 1;
+                                                            @endphp
+                                                            @foreach ($product->getSize as $size)
+                                                            <tr id="DeleteSize{{ $i_s }}">
                                                                 <td>
-                                                                    <input type="text" name="" placeholder="Name"
+                                                                    <input type="text" value="{{ $size->name }}" name="size[{{ $i_s }}][name]" placeholder="Name"
                                                                         class="form-control">
                                                                 </td>
                                                                 <td>
-                                                                    <input type="text" name="" placeholder="Price"
+                                                                    <input type="text" value="{{ $size->price }}" name="size[{{ $i_s }}][price]" placeholder="Price"
+                                                                        class="form-control">
+                                                                </td>
+                                                                <td>
+                                                                    <button type="button" id="{{ $i_s }}" class="btn btn-danger btn-sm DeleteSize">Delete</button>
+                                                                </td>
+                                                            </tr>
+                                                            @php
+                                                            $i_s++;
+                                                        @endphp
+                                                            @endforeach
+                                                            <tr>
+                                                                <td>
+                                                                    <input type="text" name="size[100][name]" placeholder="Name"
+                                                                        class="form-control">
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text" name="size[100][price]" placeholder="Price"
                                                                         class="form-control">
                                                                 </td>
                                                                 <td>
@@ -148,6 +169,8 @@
                                                                 </td>
                                                             </tr>
 
+
+
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -155,6 +178,28 @@
                                             </div>
                                         </div>
 
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="image">Choose Product Image <span
+                                                        class="text-danger">*</span></label>
+                                               <input type="file" name="image[]" multiple accept="image/*" class="form-control">
+                                            </div>
+                                        </div>
+
+                                        @if (!empty($product->getImage->count()))
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                @foreach ($product->getImage as $image)
+                                                    @if (!empty($image->getLogo()))
+                                                        <div class="col-md-1 col-sm-4 col-xl-2 mt-3 mb-4 card pb-2">
+                                                            <img src="{{ $image->getLogo() }}" style="width: 100%; height:64px;" alt="product image">
+                                                            <a onclick="return confirm('Are You Sure to Delete This Image?')" href="{{ url('admin/product/image_delete/'.$image->id) }}" class="text-danger mt-2">Delete</a>
+                                                        </div>
+                                                    @endif
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                        @endif
 
                                         <div class="col-md-12">
                                             <div class="form-group">
@@ -226,15 +271,15 @@
         });
     </script>
     <script>
-        var i = 1000;
+        var i = 101;
         // add size
         $('body').delegate('.AddSize', 'click', function(e) {
             var html = '<tr id="DeleteSize' + i + '">\n\
                                     <td>\n\
-                                        <input type="text" name="" placeholder="Name" class="form-control">\n\
+                                        <input type="text" name="size[' + i + '][name]" placeholder="Name" class="form-control">\n\
                                     </td>\n\
                                     <td>\n\
-                                        <input type="text" name="" placeholder="Price" class="form-control">\n\
+                                        <input type="text" name="size[' + i + '][price]" placeholder="Price" class="form-control">\n\
                                     </td>\n\
                                     <td>\n\
                                         <button type="button" id="' + i + '" class="btn btn-danger btn-sm DeleteSize">Delete</button>\n\
